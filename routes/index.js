@@ -1,5 +1,6 @@
 const express = require('express');
-const { readContent } = require('../helpers/readContent');
+const { readContent } = require('../services/readContent');
+const { tokenGenerator } = require('../services/tokenGenerator');
 
 // const fs = require('fs');
 
@@ -22,6 +23,11 @@ routes.get('/talker/:id', (req, res) => {
   }
 
   res.status(200).json(user[0]);
+});
+
+routes.post('/login', (req, res) => {
+  const token = tokenGenerator();
+  res.status(200).json({ token });
 });
 
 module.exports = routes;
