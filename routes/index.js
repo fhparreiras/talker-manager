@@ -1,12 +1,9 @@
 const express = require('express');
+const middlewares = require('../middlewares');
 const { readContent } = require('../services/readContent');
 const { tokenGenerator } = require('../services/tokenGenerator');
 
-// const fs = require('fs');
-
 const routes = express.Router();
-
-// const talkerData = fs.readFile('talker.json');
 
 routes.get('/talker', (request, response, next) => {
   response.status(200).json(readContent('talker.json'));
@@ -25,9 +22,9 @@ routes.get('/talker/:id', (req, res) => {
   res.status(200).json(user[0]);
 });
 
-routes.post('/login', (req, res) => {
+routes.post('/login', middlewares.validation, (req, res) => {
   const token = tokenGenerator();
-  res.status(200).json({ token });
+    res.status(200).json({ token });
 });
 
 module.exports = routes;
