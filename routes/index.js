@@ -1,5 +1,5 @@
 const express = require('express');
-const middlewares = require('../middlewares');
+const { validation, validateToken } = require('../middlewares');
 const { readContent } = require('../services/readContent');
 const { tokenGenerator } = require('../services/tokenGenerator');
 
@@ -22,9 +22,13 @@ routes.get('/talker/:id', (req, res) => {
   res.status(200).json(user[0]);
 });
 
-routes.post('/login', middlewares.validation, (req, res) => {
+routes.post('/login', validation, (req, res) => {
   const token = tokenGenerator();
     res.status(200).json({ token });
+});
+
+routes.post('/talker', validateToken, (req, res) => {
+  res.status(201);
 });
 
 module.exports = routes;
