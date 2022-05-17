@@ -1,5 +1,5 @@
 const express = require('express');
-const { validation, validateToken } = require('../middlewares');
+const { talkField, validation, validatePersonalData, validateToken } = require('../middlewares');
 const { readContent } = require('../services/readContent');
 const { tokenGenerator } = require('../services/tokenGenerator');
 
@@ -27,7 +27,8 @@ routes.post('/login', validation, (req, res) => {
     res.status(200).json({ token });
 });
 
-routes.post('/talker', validateToken, (req, res) => {
+routes.post('/talker', validateToken, validatePersonalData, talkField,
+ (req, res) => {
   res.status(201);
 });
 
