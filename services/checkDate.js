@@ -10,9 +10,7 @@ const checkDate = (date) => {
   const checkDay = daysArray.includes(splitDate[0]);
   const checkMonth = monthsArray.includes(splitDate[1]);
   const checkYear = splitDate[2] > 1900 && splitDate[2] <= currentDate.getFullYear();
-  return (checkDay + checkMonth + checkYear);
+  return checkDay + checkMonth + checkYear;
 };
-
-// checkDate('02/05/2022');
 
 module.exports = checkDate;
