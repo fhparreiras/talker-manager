@@ -7,15 +7,29 @@ const { writeContent } = require('../services/writeContent');
 
 const routes = express.Router();
 
-routes.get('/talker', (request, response) => {
-  const content = readContent('./talker.json');
+routes.get('/talker', (request, response, next) => {
+  const content = readContent();
   response.status(200).json(content);
+  next();
+});
+
+routes.get('/talker/search', validateToken, (req, res) => {
+  const searchTerm = req.query;
+  const talkers = [readContent()];
+  if (!searchTerm || searchTerm === '') {
+    return res.status(200).json(talkers);
+  }
+  const filteredTalkers = talkers.filter((talker) => Object.values(talker).includes(searchTerm));
+  if (filteredTalkers.length !== 0) {
+    return res.status(200).json([]);
+  } 
+  return res.status(200).json(filteredTalkers);
 });
 
 routes.get('/talker/:id', (req, res, next) => {
   const { id } = req.params;
 
-  const content = readContent('talker.json');
+  const content = readContent();
   const user = content.filter((u) => u.id === parseInt(id, 10));
 
   if (user.length === 0) {
@@ -36,7 +50,7 @@ routes.post('/talker', validateToken, validatePersonalData, talkField,
   validateRate, async (req, res, next) => {
     try {
       const { name, age, talk: { watchedAt, rate } } = req.body;
-      const talkersList = readContent('./talker.json');
+      const talkersList = readContent();
       const newTalker = { name, age, id: talkersList.length + 1, talk: { watchedAt, rate } };
       talkersList.push(newTalker);
       writeContent('./talker.json', ...talkersList, newTalker); 
@@ -51,7 +65,7 @@ routes.put('/talker/:id', validateToken, validatePersonalData, talkField, valida
   (req, res) => {
     const { id } = req.params;
     const { name, age, talk: { watchedAt, rate } } = req.body;
-    const talkers = readContent('./talker.json');
+    const talkers = readContent();
     console.log('TALKERS: ', talkers);
     const talkerIndex = [talkers].findIndex((talker) => talker.id === parseInt(id, 10));
     if (talkerIndex === -1) {
@@ -59,19 +73,19 @@ routes.put('/talker/:id', validateToken, validatePersonalData, talkField, valida
     }
     
     talkers[talkerIndex] = { ...talkers[talkerIndex], name, age, talk: { watchedAt, rate } };
-    return res.status(200).json([]);
+    res.status(200).end();
 });
 
 routes.delete('/talker/:id', validateToken, (req, res) => {
   const { id } = req.params;
-  const talkers = readContent('talker.json');
+  const talkers = readContent();
   const talkerIndex = [talkers].findIndex((talker) => talker.id === parseInt(id, 10));
     if (talkerIndex === -1) {
       console.log('talker: ', talkers);
       return res.status(404).json({ message: 'Id não encontrado' });
     }
     talkers.splice(talkerIndex, 1);
-    return res.status(204);
+    res.status(204).end();
 });
 
 module.exports = routes;
