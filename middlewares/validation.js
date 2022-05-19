@@ -3,8 +3,8 @@ const testPassword = require('../services/passwordValidation');
 
 const validation = (req, res, next) => {
   const { email, password } = req.body;
-  testEmail(email, res);
-  testPassword(password, res);
+  testEmail(email);
+  testPassword(password);
   next();
 };
 

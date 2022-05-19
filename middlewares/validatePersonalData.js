@@ -1,16 +1,20 @@
 const validatePersonalData = (req, res, next) => {
   const { name, age } = req.body;
+  const errorMessage = { status: 400, message: 'O campo "name" é obrigatório' };
   if (!name) {
-    return res.status(400).json({ message: 'O campo "name" é obrigatório' });
+    throw errorMessage;
   }
   if (name.length < 3) {
-    return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
+    errorMessage.message = 'O "name" deve ter pelo menos 3 caracteres';
+    throw errorMessage;
   }
   if (!age) {
-    return res.status(400).json({ message: 'O campo "age" é obrigatório' });
+    errorMessage.message = 'O campo "age" é obrigatório';
+    throw errorMessage;
   }
   if (parseInt(age, 10) < 18) {
-    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
+    errorMessage.message = 'A pessoa palestrante deve ser maior de idade';
+    throw errorMessage;
   }
   next();
 };

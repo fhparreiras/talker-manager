@@ -2,10 +2,12 @@ const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
  
   if (authorization === undefined) {
-    return res.status(401).json({ message: 'Token não encontrado' });
+    const errorMessage = { status: 401, message: 'Token não encontrado' };
+    throw errorMessage;
   }
   if (authorization.length < 16) {
-    return res.status(401).json({ message: 'Token inválido' });
+    const errorMessage = { status: 401, message: 'Token inválido' };
+    throw errorMessage;
   }
   next();
 };

@@ -1,8 +1,8 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 
 const writeContent = (fileName, content) => {
   const newContent = JSON.stringify(content);
-  fs.writeFile(fileName, newContent);
+  fs.writeFileSync(fileName, newContent, 'utf-8');
 };
 
 module.exports = { writeContent };

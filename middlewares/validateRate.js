@@ -3,7 +3,8 @@ const validateRate = (req, res, next) => {
   if (talk.rate > 0 && talk.rate < 6) {
     next();
   }
-  return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  const errorMessage = { status: 400, message: 'O campo "rate" deve ser um inteiro de 1 à 5' };
+  throw errorMessage;
 };
 
 module.exports = validateRate;
