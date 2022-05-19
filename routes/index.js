@@ -20,7 +20,7 @@ routes.get('/talker/search', validateToken, (req, res) => {
     return res.status(200).json(talkers);
   }
   const filteredTalkers = talkers.filter((talker) => Object.values(talker).includes(searchTerm));
-  if (filteredTalkers.length !== 0) {
+  if (filteredTalkers.length === 0) {
     return res.status(200).json([]);
   } 
   return res.status(200).json(filteredTalkers);
@@ -53,8 +53,9 @@ routes.post('/talker', validateToken, validatePersonalData, talkField,
       const talkersList = readContent();
       const newTalker = { name, age, id: talkersList.length + 1, talk: { watchedAt, rate } };
       talkersList.push(newTalker);
-      writeContent('./talker.json', ...talkersList, newTalker); 
-      res.status(201).json([newTalker]);
+      const filteredTalker = talkersList.filter((talker) => talker.id === newTalker.id);
+      writeContent('./talker.json', filteredTalker); 
+      res.status(201).json(filteredTalker[0]);
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }

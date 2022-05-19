@@ -2,7 +2,8 @@ const fs = require('fs');
 
 const readContent = () => {
   const response = fs.readFileSync('./talker.json', 'utf-8');
-  return JSON.parse(response);
+  const result = JSON.parse(response);
+  return result;
 };
 
 module.exports = { readContent };
