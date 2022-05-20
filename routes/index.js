@@ -58,7 +58,7 @@ routes.post('/talker', validateToken, validatePersonalData, talkField,
       const newTalker = { name, age, id: talkersList.length + 1, talk: { watchedAt, rate } };
       talkersList.push(newTalker);
       const filteredTalker = talkersList.filter((talker) => talker.id === newTalker.id);
-      writeContent('./talker.json', filteredTalker); 
+      writeContent('./talker.json', talkersList); 
       res.status(201).json(filteredTalker[0]);
     } catch (error) {
       return res.status(400).json({ message: error.message });

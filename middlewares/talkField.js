@@ -3,7 +3,7 @@ const checkDate = require('../services/checkDate.js');
 const talkField = (req, res, next) => {
   const { talk } = req.body;
   // const { name, age, talk: { watchedAt, rate } } = req.body;
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (!talk || talk.watchedAt === undefined || talk.rate === undefined) {
     const errorMessage = { status: 400, 
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' };
     throw errorMessage;
