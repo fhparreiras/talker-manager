@@ -77,10 +77,8 @@ routes.put('/talker/:id', validateToken, validatePersonalData, talkField, valida
     }
     const teste = { name, age, id: Number(talkers[talkerIndex].id), talk };
     talkers[talkerIndex] = teste;
-    const filteredTalker = talkers.filter((talker) => talker.id === talkers[talkerIndex].id);
-    console.log('FILTERED: ', filteredTalker);
     writeContent('./talker.json', talkers);
-    return res.status(200).send(filteredTalker);
+    return res.status(200).json(talkers[talkerIndex]);
 });
 
 routes.delete('/talker/:id', validateToken, (req, res) => {
