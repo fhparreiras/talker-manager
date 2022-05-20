@@ -13,14 +13,18 @@ routes.get('/talker', (request, response, next) => {
   next();
 });
 
-routes.get('/talker/search', validateToken, (req, res) => {
-  const searchTerm = req.query;
-  const talkers = [readContent()];
-  if (!searchTerm || searchTerm === '') {
+routes.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const talkers = readContent();
+  console.log('TALKERS TESTE: ', talkers);
+  if (!q || q === '') {
     return res.status(200).json(talkers);
   }
-  const filteredTalkers = talkers.filter((talker) => Object.values(talker).includes(searchTerm));
-  if (filteredTalkers.length === 0) {
+  const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
+  console.log('FILTERED REQ 8: ', filteredTalkers);
+  // console.log('SEARCH TERM', q);
+  // console.log('TALEKRS REQ8: ', talkers);
+  if (!filteredTalkers) {
     return res.status(200).json([]);
   } 
   return res.status(200).json(filteredTalkers);
@@ -71,7 +75,7 @@ routes.put('/talker/:id', validateToken, validatePersonalData, talkField, valida
     if (talkerIndex === -1) {
       return res.status(400).json({ message: 'Id não encontrado' });
     }
-    const teste = { id: Number(talkers[talkerIndex].id), name, age, talk };
+    const teste = { name, age, id: Number(talkers[talkerIndex].id), talk };
     talkers[talkerIndex] = teste;
     const filteredTalker = talkers.filter((talker) => talker.id === talkers[talkerIndex].id);
     console.log('FILTERED: ', filteredTalker);
